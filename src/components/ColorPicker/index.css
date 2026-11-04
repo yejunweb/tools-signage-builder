@@ -1,128 +1,184 @@
-.comp-color-picker {
-    position: relative;
+/* ========== Trigger：色块 + Hex 垂直居中 ========== */
+/* antd 默认 align-items:flex-start，需覆盖 */
+.comp-color-picker.ant-color-picker-trigger {
     display: inline-flex;
-}
-
-.comp-color-picker__trigger {
+    align-items: center;
+    justify-content: flex-start;
     height: 28px;
+    min-height: 28px;
+    min-width: 0;
     padding: 0 8px;
     border-radius: 6px;
     border: 1px solid #e5e8ef;
     background: #fff;
-    display: inline-flex;
-    align-items: center;
     gap: 6px;
-    cursor: pointer;
-    color: #5c6573;
-}
-
-.comp-color-picker__swatch {
-    width: 18px;
-    height: 18px;
-    border-radius: 4px;
-    border: 1px solid rgba(15, 23, 42, 0.08);
-    display: block;
-}
-
-.comp-color-picker__hex {
-    font-size: 12px;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    color: #1f2329;
-}
-
-.comp-color-picker__panel {
-    position: absolute;
-    z-index: 50;
-    top: calc(100% + 6px);
-    left: 0;
-    width: 220px;
-    padding: 10px;
-    border-radius: 12px;
-    background: #fff;
-    border: 1px solid #eef1f6;
-    box-shadow: 0 20px 48px rgba(15, 23, 42, 0.16);
+    width: 100%;
     box-sizing: border-box;
 }
 
-.comp-color-picker__sv {
-    position: relative;
-    width: 100%;
-    height: 120px;
-    border-radius: 8px;
-    background-image: linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, transparent);
-    cursor: crosshair;
+.comp-color-picker.ant-color-picker-trigger .ant-color-picker-color-block {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    align-self: center;
+}
+
+.comp-color-picker.ant-color-picker-trigger .ant-color-picker-trigger-text {
+    margin-inline: 0;
+    font-size: 12px;
+    line-height: 16px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: #1f2329;
+    flex: 1;
+    min-width: 0;
     overflow: hidden;
+    text-overflow: ellipsis;
+    align-self: center;
 }
 
-.comp-color-picker__sv-knob {
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    border: 2px solid #fff;
-    border-radius: 50%;
-    box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.25);
-    transform: translate(-50%, -50%);
-    pointer-events: none;
+/*
+ * Popup 宽度：按预选一行算够宽（勿再卡 196 导致裁切）
+ *   10×16 + 9×4 = 196（色块+间距）
+ *   + 左右 padding 8×2 = 16（popupOverlayInner）
+ * → 212；色板 / 色相 / HEX 随内容区 100% 同宽
+ */
+.comp-color-picker-popup .ant-color-picker-inner-content {
+    box-sizing: border-box;
+    width: 212px;
+    min-width: 212px;
+    max-width: none;
 }
 
-.comp-color-picker__hue {
-    position: relative;
-    margin-top: 10px;
-    height: 12px;
-    border-radius: 999px;
-    background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
-    cursor: pointer;
+.comp-color-picker-popup .ant-color-picker-inner-content > .ant-divider {
+    margin: 6px 0;
 }
 
-.comp-color-picker__hue-knob {
-    position: absolute;
-    top: 50%;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: #fff;
-    border: 2px solid #fff;
-    box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.2);
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-}
-
-.comp-color-picker__presets {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    gap: 6px;
-    margin-top: 10px;
-}
-
-.comp-color-picker__preset {
+.comp-color-picker-popup .ant-color-picker-select {
     width: 100%;
-    aspect-ratio: 1;
-    border: none;
-    border-radius: 4px;
-    padding: 0;
-    cursor: pointer;
+    margin-bottom: 6px;
 }
 
-.comp-color-picker__hex-row {
+.comp-color-picker-popup .ant-color-picker-palette {
+    width: 100%;
+    min-height: 112px;
+}
+
+.comp-color-picker-popup .ant-color-picker-slider-container {
+    width: 100%;
+}
+
+.comp-color-picker-popup .ant-color-picker-slider {
+    width: 100%;
+    margin-bottom: 6px;
+}
+
+.comp-color-picker-popup .ant-color-picker-input-container {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-top: 10px;
-    font-size: 12px;
-    color: #5c6573;
+    width: 100%;
+    margin-top: 0;
 }
 
-.comp-color-picker__hex-row input {
-    flex: 1;
-    height: 28px;
-    border: 1px solid #e5e8ef;
-    border-radius: 6px;
-    padding: 0 8px;
+.comp-color-picker-popup .ant-color-picker-format-select {
+    flex: 0 0 78px;
+    min-width: 78px;
+    width: 78px;
+    margin-inline-end: 6px;
     font-size: 12px;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    outline: none;
 }
 
-.comp-color-picker__hex-row input:focus {
-    border-color: #3370ff;
+.comp-color-picker-popup .ant-color-picker-format-select .ant-select-selector {
+    padding-inline: 6px !important;
+}
+
+.comp-color-picker-popup .ant-color-picker-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto !important;
+}
+
+.comp-color-picker-popup .ant-color-picker-presets {
+    width: 100%;
+    overflow: visible;
+}
+
+.comp-color-picker-popup .ant-color-picker-presets-label {
+    font-size: 12px;
+    line-height: 18px;
+}
+
+/* 预设：一行 10 色 = 196；父级已按 212 留出 padding */
+.comp-color-picker-popup .ant-color-picker-presets-items {
+    display: grid !important;
+    grid-template-columns: repeat(10, 16px);
+    gap: 4px;
+    width: 196px;
+    justify-content: start;
+    box-sizing: border-box;
+}
+
+.comp-color-picker-popup .ant-color-picker-presets-color {
+    width: 16px !important;
+    height: 16px !important;
+    border-radius: 2px;
+    box-sizing: border-box;
+}
+
+/* 选中 / hover：不要边框（antd 用 ::before 画环） */
+.comp-color-picker-popup .ant-color-picker-presets-color::before,
+.comp-color-picker-popup .ant-color-picker-presets-color:hover::before,
+.comp-color-picker-popup .ant-color-picker-presets-color-checked::before {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    width: 0 !important;
+    height: 0 !important;
+    content: none !important;
+}
+
+/* 对勾调小，适配 16px 色块（antd 默认约 5/13×8/13） */
+.comp-color-picker-popup .ant-color-picker-presets-color::after {
+    width: 4px !important;
+    height: 7px !important;
+    inset-inline-start: 30% !important;
+    margin-top: -1px;
+    border-width: 1.5px !important;
+}
+
+/* 不要折叠箭头；标题不可点收起 */
+.comp-color-picker-popup .ant-color-picker-presets .ant-collapse-expand-icon {
+    display: none !important;
+}
+
+.comp-color-picker-popup .ant-color-picker-presets .ant-collapse-header {
+    padding: 0 !important;
+    cursor: default;
+    pointer-events: none;
+}
+
+.comp-color-picker-popup .ant-color-picker-presets .ant-collapse-content,
+.comp-color-picker-popup .ant-color-picker-presets .ant-collapse-content-hidden {
+    display: block !important;
+    height: auto !important;
+    opacity: 1 !important;
+}
+
+.comp-color-picker-popup .ant-color-picker-presets .ant-collapse-content-box,
+.comp-color-picker-popup .ant-color-picker-presets .ant-collapse-body {
+    padding: 6px 0 0 !important;
+    overflow: visible !important;
+}
+
+.comp-color-picker-popup .ant-color-picker-presets .ant-collapse {
+    gap: 0;
+}
+
+/* 弹出层本身不要裁切预设 */
+.comp-color-picker-popup.ant-color-picker-css-var,
+.comp-color-picker-popup .ant-popover-container,
+.comp-color-picker-popup .ant-color-picker-inner,
+.comp-color-picker-popup {
+    overflow: visible;
 }

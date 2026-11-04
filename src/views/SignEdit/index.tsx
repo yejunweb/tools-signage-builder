@@ -1,5 +1,6 @@
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { LockOutlined, UnlockOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Input, InputNumber, Modal } from 'antd';
 
 import ColorPicker from '@/components/ColorPicker';
@@ -47,11 +48,16 @@ function SignEdit({ recordId, onBack, onSaved }: SignEditProps) {
         updateRoom,
         updateRoomStyle,
         addRoom,
+        duplicateRoom,
         removeRoom,
         onRoomDragEnd,
         handleBack,
         handleSave,
         handleExport,
+        sizeLocked,
+        toggleSizeLocked,
+        setCanvasWidth,
+        setCanvasHeight,
         blurClamp,
         toggleStyleOpen,
         toggleRoomPanel,
@@ -72,7 +78,7 @@ function SignEdit({ recordId, onBack, onSaved }: SignEditProps) {
 
                     <section className='pg-sign-edit__section'>
                         <h3>标牌画布</h3>
-                        <div className='pg-sign-edit__row3'>
+                        <div className='pg-sign-edit__row-canvas'>
                             <div>
                                 <label className='pg-sign-edit__label'>宽</label>
                                 <InputNumber
@@ -80,10 +86,20 @@ function SignEdit({ recordId, onBack, onSaved }: SignEditProps) {
                                     value={draft.width}
                                     min={WIDTH_MIN}
                                     max={WIDTH_MAX}
-                                    onChange={v => patchDraft({ width: typeof v === 'number' ? v : draft.width })}
+                                    onChange={v => setCanvasWidth(typeof v === 'number' ? v : null)}
                                     onBlur={() => blurClamp('width', WIDTH_MIN, WIDTH_MAX)}
                                 />
                             </div>
+                            <button
+                                type='button'
+                                className={`pg-sign-edit__size-lock${sizeLocked ? ' is-locked' : ''}`}
+                                aria-label={sizeLocked ? '解锁宽高比例' : '锁定宽高比例'}
+                                title={sizeLocked ? '已锁定比例（点击解锁）' : '锁定比例（改一边联动另一边）'}
+                                aria-pressed={sizeLocked}
+                                onClick={toggleSizeLocked}
+                            >
+                                {sizeLocked ? <LockOutlined /> : <UnlockOutlined />}
+                            </button>
                             <div>
                                 <label className='pg-sign-edit__label'>高</label>
                                 <InputNumber
@@ -91,7 +107,7 @@ function SignEdit({ recordId, onBack, onSaved }: SignEditProps) {
                                     value={draft.height}
                                     min={HEIGHT_MIN}
                                     max={HEIGHT_MAX}
-                                    onChange={v => patchDraft({ height: typeof v === 'number' ? v : draft.height })}
+                                    onChange={v => setCanvasHeight(typeof v === 'number' ? v : null)}
                                     onBlur={() => blurClamp('height', HEIGHT_MIN, HEIGHT_MAX)}
                                 />
                             </div>
@@ -226,6 +242,7 @@ function SignEdit({ recordId, onBack, onSaved }: SignEditProps) {
                                                 index={idx}
                                                 panelOpen={Boolean(roomPanelOpen[room.id])}
                                                 onTogglePanel={() => toggleRoomPanel(room.id)}
+                                                onCopy={() => duplicateRoom(room.id)}
                                                 onRemove={() => removeRoom(room.id)}
                                                 onUpdate={patch => updateRoom(room.id, patch)}
                                                 onUpdateStyle={(key, patch) => updateRoomStyle(room.id, key, patch)}

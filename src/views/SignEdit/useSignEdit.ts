@@ -4,7 +4,7 @@ import { type DragEndEvent, KeyboardSensor, PointerSensor, useSensor, useSensors
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { message } from 'antd';
 
-import { BG_PRESETS } from '@/constants/signage';
+import { BG_PRESETS, HEIGHT_MAX, HEIGHT_MIN, WIDTH_MAX, WIDTH_MIN } from '@/constants/signage';
 import { getRecord, upsertRecord } from '@/services/history';
 import type { ShowInfoItem, ShowType, SignDraft, TextStyle } from '@/types/signage';
 import { createEmptyRoom, createNewDraft, recordToDraft } from '@/utils/defaults';
@@ -37,6 +37,10 @@ export function useSignEdit({ recordId, onBack, onSaved }: UseSignEditArgs) {
     /** 房号整条 panel 展开态；缺省/false = 收起（只见基本信息行） */
     const [roomPanelOpen, setRoomPanelOpen] = useState<StyleOpenMap>({});
     const [leaveOpen, setLeaveOpen] = useState(false);
+    /** 画布宽高比例锁定（仅 UI 态，不写入草稿） */
+    const [sizeLocked, setSizeLocked] = useState(false);
+    /** 打开锁定时冻结的宽高比；锁定期间联动只用它，避免 InputNumber 逐键入夹紧后把比例写坏 */
+    const [lockedAspectRatio, setLockedAspectRatio] = useState<number | null>(null);
     const [bgMode, setBgMode] = useState<'preset' | 'custom'>(() => {
         const hit = BG_PRESETS.some(p => p.color.toLowerCase() === draft.background.toLowerCase());
         return hit ? 'preset' : 'custom';
@@ -75,6 +79,25 @@ export function useSignEdit({ recordId, onBack, onSaved }: UseSignEditArgs) {
     };
 
     const addRoom = () => setDraft(prev => ({ ...prev, showInfoLs: [...prev.showInfoLs, createEmptyRoom()] }));
+
+    /** 复制整条房号，紧跟原条插入，新 id */
+    const duplicateRoom = (id: string) => {
+        setDraft(prev => {
+            const idx = prev.showInfoLs.findIndex(item => item.id === id);
+            if (idx < 0) return prev;
+            const src = prev.showInfoLs[idx];
+            const copy: ShowInfoItem = {
+                ...src,
+                id: createId(),
+                unitStyle: { ...src.unitStyle },
+                roomStyle: { ...src.roomStyle },
+                areaStyle: { ...src.areaStyle },
+            };
+            const showInfoLs = [...prev.showInfoLs];
+            showInfoLs.splice(idx + 1, 0, copy);
+            return { ...prev, showInfoLs };
+        });
+    };
 
     const removeRoom = (id: string) => {
         setDraft(prev => ({ ...prev, showInfoLs: prev.showInfoLs.filter(item => item.id !== id) }));
@@ -156,8 +179,64 @@ export function useSignEdit({ recordId, onBack, onSaved }: UseSignEditArgs) {
         message.info(result.reason);
     };
 
+    /** 安全取宽高比；非法/零高则返回 null，调用方勿联动 */
+    const safeAspectRatio = (width: number, height: number): number | null => {
+        if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) return null;
+        return width / height;
+    };
+
+    /** 切换锁定：开锁时冻结当前宽高比；解锁清空。夹紧后的中间值绝不回写冻结比 */
+    const toggleSizeLocked = () => {
+        if (sizeLocked) {
+            setSizeLocked(false);
+            setLockedAspectRatio(null);
+            return;
+        }
+        setLockedAspectRatio(safeAspectRatio(draft.width, draft.height));
+        setSizeLocked(true);
+    };
+
+    const setCanvasWidth = (v: number | null) => {
+        setDraft(prev => {
+            if (typeof v !== 'number') return prev;
+            if (!sizeLocked || lockedAspectRatio == null) return { ...prev, width: v };
+            return {
+                ...prev,
+                width: v,
+                height: clampNumber(Math.round(v / lockedAspectRatio), HEIGHT_MIN, HEIGHT_MAX),
+            };
+        });
+    };
+
+    const setCanvasHeight = (v: number | null) => {
+        setDraft(prev => {
+            if (typeof v !== 'number') return prev;
+            if (!sizeLocked || lockedAspectRatio == null) return { ...prev, height: v };
+            return {
+                ...prev,
+                height: v,
+                width: clampNumber(Math.round(v * lockedAspectRatio), WIDTH_MIN, WIDTH_MAX),
+            };
+        });
+    };
+
     const blurClamp = (key: 'width' | 'height', min: number, max: number) => {
-        setDraft(prev => ({ ...prev, [key]: clampNumber(prev[key] || min, min, max) }));
+        setDraft(prev => {
+            const clamped = clampNumber(prev[key] || min, min, max);
+            if (!sizeLocked || lockedAspectRatio == null) return { ...prev, [key]: clamped };
+            if (key === 'width') {
+                return {
+                    ...prev,
+                    width: clamped,
+                    height: clampNumber(Math.round(clamped / lockedAspectRatio), HEIGHT_MIN, HEIGHT_MAX),
+                };
+            }
+            return {
+                ...prev,
+                height: clamped,
+                width: clampNumber(Math.round(clamped * lockedAspectRatio), WIDTH_MIN, WIDTH_MAX),
+            };
+        });
     };
 
     const toggleStyleOpen = (key: string) => setStyleOpen(m => ({ ...m, [key]: !m[key] }));
@@ -180,11 +259,16 @@ export function useSignEdit({ recordId, onBack, onSaved }: UseSignEditArgs) {
         updateRoom,
         updateRoomStyle,
         addRoom,
+        duplicateRoom,
         removeRoom,
         onRoomDragEnd,
         handleBack,
         handleSave,
         handleExport,
+        sizeLocked,
+        toggleSizeLocked,
+        setCanvasWidth,
+        setCanvasHeight,
         blurClamp,
         toggleStyleOpen,
         toggleRoomPanel,

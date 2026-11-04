@@ -1,4 +1,4 @@
-import { DeleteOutlined } from '@ant-design/icons';
+import { CopyOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Input } from 'antd';
@@ -13,13 +13,14 @@ type SortableRoomCardProps = {
     index: number;
     panelOpen: boolean;
     onTogglePanel: () => void;
+    onCopy: () => void;
     onRemove: () => void;
     onUpdate: (patch: Partial<ShowInfoItem>) => void;
     onUpdateStyle: (key: 'unitStyle' | 'roomStyle' | 'areaStyle', patch: Partial<TextStyle>) => void;
 };
 
-/** 房号条：单行（箭头→手柄→prefix 输入→删除图标）；样式收进 ExpandPanel；仅手柄可拖 */
-function SortableRoomCard({ room, index, panelOpen, onTogglePanel, onRemove, onUpdate, onUpdateStyle }: SortableRoomCardProps) {
+/** 房号条：单行（箭头→手柄→prefix 输入→复制→删除图标）；样式收进 ExpandPanel；仅手柄可拖 */
+function SortableRoomCard({ room, index, panelOpen, onTogglePanel, onCopy, onRemove, onUpdate, onUpdateStyle }: SortableRoomCardProps) {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: room.id });
 
     const style = {
@@ -71,6 +72,9 @@ function SortableRoomCard({ room, index, panelOpen, onTogglePanel, onRemove, onU
                     onChange={e => onUpdate({ area: e.target.value })}
                     suffix='㎡'
                 />
+                <button type='button' className='pg-sign-edit__room-copy' aria-label='复制' title='复制' onClick={onCopy}>
+                    <CopyOutlined />
+                </button>
                 <button type='button' className='pg-sign-edit__room-del' aria-label='删除' title='删除' onClick={onRemove}>
                     <DeleteOutlined />
                 </button>

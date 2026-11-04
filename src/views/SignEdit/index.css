@@ -56,7 +56,8 @@
 }
 
 .pg-sign-edit__row2,
-.pg-sign-edit__row3 {
+.pg-sign-edit__row3,
+.pg-sign-edit__row-canvas {
     display: grid;
     gap: 10px;
     margin-bottom: 10px;
@@ -68,6 +69,40 @@
 
 .pg-sign-edit__row3 {
     grid-template-columns: 1fr 1fr 1fr;
+}
+
+/* 宽 | 锁定 | 高 | 圆角；锁定钮与输入底对齐 */
+.pg-sign-edit__row-canvas {
+    grid-template-columns: 1fr 28px 1fr 1fr;
+    align-items: end;
+}
+
+.pg-sign-edit__size-lock {
+    width: 28px;
+    height: 28px;
+    margin-bottom: 0;
+    padding: 0;
+    border: 1px solid #e5e8ef;
+    border-radius: 6px;
+    background: #fff;
+    color: #8b95a8;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pg-sign-edit__size-lock:hover {
+    border-color: #3370ff;
+    color: #3370ff;
+    background: rgba(51, 112, 255, 0.06);
+}
+
+.pg-sign-edit__size-lock.is-locked {
+    border-color: #3370ff;
+    color: #3370ff;
+    background: rgba(51, 112, 255, 0.08);
 }
 
 .pg-sign-edit__full {
@@ -253,6 +288,7 @@
     white-space: nowrap;
 }
 
+.pg-sign-edit__room-copy,
 .pg-sign-edit__room-del {
     flex-shrink: 0;
     width: 28px;
@@ -262,12 +298,24 @@
     border: none;
     border-radius: 6px;
     background: transparent;
-    color: #e34d59;
     font-size: 14px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+}
+
+.pg-sign-edit__room-copy {
+    color: #5c6573;
+}
+
+.pg-sign-edit__room-copy:hover {
+    color: #3370ff;
+    background: rgba(51, 112, 255, 0.08);
+}
+
+.pg-sign-edit__room-del {
+    color: #e34d59;
 }
 
 .pg-sign-edit__room-del:hover {
@@ -322,21 +370,41 @@
 
 .pg-sign-edit__style-body {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
     padding: 10px 4px 4px;
 }
 
+/* label + 控件同行；字色/描边色/描边宽三组仍由 style-body 横排 */
 .pg-sign-edit__style-field {
-    display: grid;
-    grid-template-columns: 112px 1fr;
-    gap: 10px;
+    display: flex;
+    flex-direction: row;
     align-items: center;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
 }
 
 .pg-sign-edit__style-field label {
+    flex-shrink: 0;
     font-size: 12px;
     color: #5c6573;
+    white-space: nowrap;
+}
+
+.pg-sign-edit__style-field .ant-input-number {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+}
+
+.pg-sign-edit__style-field .comp-color-picker {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .pg-sign-edit__footer {
