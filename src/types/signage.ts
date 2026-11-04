@@ -12,8 +12,12 @@ export type ShowType = 'buildInfo' | 'floorInfo' | 'unitInfo' | 'roomInfo' | 'ar
 export interface ShowInfoItem {
     id: string;
     unitNum: string;
+    /** 单元号后的可编辑后缀，默认「单元」 */
+    unitSuffix: string;
     roomId: string;
     area: string;
+    /** 面积后的可编辑单位，默认「㎡」 */
+    areaSuffix: string;
     unitStyle: TextStyle;
     roomStyle: TextStyle;
     areaStyle: TextStyle;

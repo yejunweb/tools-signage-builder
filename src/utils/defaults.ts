@@ -1,8 +1,10 @@
 import {
     ALL_SHOW_TYPES,
+    DEFAULT_AREA_SUFFIX,
     DEFAULT_BACKGROUND,
     DEFAULT_BORDER_RADIUS,
     DEFAULT_HEIGHT,
+    DEFAULT_UNIT_SUFFIX,
     DEFAULT_WIDTH,
 } from '@/constants/signage';
 import type { ShowInfoItem, SignDraft, SignRecord, TextStyle } from '@/types/signage';
@@ -20,8 +22,10 @@ export const defaultTextStyle = (): TextStyle => ({
 export const createEmptyRoom = (): ShowInfoItem => ({
     id: createId(),
     unitNum: '',
+    unitSuffix: DEFAULT_UNIT_SUFFIX,
     roomId: '',
     area: '',
+    areaSuffix: DEFAULT_AREA_SUFFIX,
     unitStyle: defaultTextStyle(),
     roomStyle: defaultTextStyle(),
     areaStyle: defaultTextStyle(),
@@ -58,6 +62,8 @@ export const recordToDraft = (record: SignRecord): SignDraft => ({
     showTypes: [...record.showTypes],
     showInfoLs: record.showInfoLs.map(item => ({
         ...item,
+        unitSuffix: item.unitSuffix ?? DEFAULT_UNIT_SUFFIX,
+        areaSuffix: item.areaSuffix ?? DEFAULT_AREA_SUFFIX,
         unitStyle: { ...item.unitStyle },
         roomStyle: { ...item.roomStyle },
         areaStyle: { ...item.areaStyle },
@@ -76,6 +82,8 @@ export const cloneRecordAsCopy = (record: SignRecord): SignRecord => {
         showInfoLs: record.showInfoLs.map(item => ({
             ...item,
             id: createId(),
+            unitSuffix: item.unitSuffix ?? DEFAULT_UNIT_SUFFIX,
+            areaSuffix: item.areaSuffix ?? DEFAULT_AREA_SUFFIX,
             unitStyle: { ...item.unitStyle },
             roomStyle: { ...item.roomStyle },
             areaStyle: { ...item.areaStyle },

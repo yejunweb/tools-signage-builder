@@ -18,6 +18,12 @@ export const DEFAULT_WIDTH = 400;
 export const DEFAULT_HEIGHT = 100;
 export const DEFAULT_BACKGROUND = '#ef7296';
 
+/** 房号「单元」后缀默认（原 canvas/表单写死文案） */
+export const DEFAULT_UNIT_SUFFIX = '单元';
+
+/** 房号「㎡」单位默认（原表单 suffix 写死文案；canvas 曾用 m²，现跟字段） */
+export const DEFAULT_AREA_SUFFIX = '㎡';
+
 export const BG_PRESETS: { key: string; label: string; color: string }[] = [
     { key: 'pink', label: '预备粉', color: '#ef7296' },
     { key: 'blue', label: '预备蓝', color: '#5dabd7' },

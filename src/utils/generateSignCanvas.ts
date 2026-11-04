@@ -1,4 +1,10 @@
-import { BORDER_LINE_WIDTH, SPLIT_LINE_DASH, SPLIT_LINE_WIDTH } from '@/constants/signage';
+import {
+    BORDER_LINE_WIDTH,
+    DEFAULT_AREA_SUFFIX,
+    DEFAULT_UNIT_SUFFIX,
+    SPLIT_LINE_DASH,
+    SPLIT_LINE_WIDTH,
+} from '@/constants/signage';
 import type { ShowInfoItem, ShowType, TextStyle } from '@/types/signage';
 
 import { drawAdaptiveText, getMinFontSizeOfLine } from './drawAdaptiveText';
@@ -167,7 +173,7 @@ export const generateSignCanvas = (input: GenerateSignCanvasInput): HTMLCanvasEl
     }
 
     if (mapped.includes('unitInfo') && showInfoLs.length > 0) {
-        const unitTextLs = showInfoLs.map(v => `${v.unitNum}单元`);
+        const unitTextLs = showInfoLs.map(v => `${v.unitNum}${v.unitSuffix ?? DEFAULT_UNIT_SUFFIX}`);
         const unitAvgWidth = canvas.width / unitTextLs.length;
         const unitFontSize = getMinFontSizeOfLine(unitTextLs, unitAvgWidth, avgHeight);
         const unitAccCount = mapped.filter(v => v === 'basicInfo').length;
@@ -219,7 +225,7 @@ export const generateSignCanvas = (input: GenerateSignCanvasInput): HTMLCanvasEl
     }
 
     if (mapped.includes('areaInfo') && showInfoLs.length > 0) {
-        const areaTextLs = showInfoLs.map(v => `${v.area || ''}m²`);
+        const areaTextLs = showInfoLs.map(v => `${v.area || ''}${v.areaSuffix ?? DEFAULT_AREA_SUFFIX}`);
         const areaAvgWidth = canvas.width / areaTextLs.length;
         const areaFontSize = getMinFontSizeOfLine(areaTextLs, areaAvgWidth, avgHeight);
         const areaAccCount = mapped.filter(v => v === 'basicInfo' || v === 'unitInfo' || v === 'roomInfo').length;

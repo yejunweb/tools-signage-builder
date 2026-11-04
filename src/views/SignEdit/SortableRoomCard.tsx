@@ -56,6 +56,16 @@ function SortableRoomCard({ room, index, panelOpen, onTogglePanel, onCopy, onRem
                     value={room.unitNum}
                     placeholder='如 1'
                     onChange={e => onUpdate({ unitNum: e.target.value })}
+                    suffix={
+                        <input
+                            className='pg-sign-edit__inline-suffix'
+                            value={room.unitSuffix}
+                            aria-label='单元后缀'
+                            title='单元后缀（预览/导出跟随）'
+                            onChange={e => onUpdate({ unitSuffix: e.target.value })}
+                            onClick={e => e.stopPropagation()}
+                        />
+                    }
                 />
                 <Input
                     className='pg-sign-edit__room-input'
@@ -70,7 +80,16 @@ function SortableRoomCard({ room, index, panelOpen, onTogglePanel, onCopy, onRem
                     value={room.area}
                     placeholder='如 143'
                     onChange={e => onUpdate({ area: e.target.value })}
-                    suffix='㎡'
+                    suffix={
+                        <input
+                            className='pg-sign-edit__inline-suffix'
+                            value={room.areaSuffix}
+                            aria-label='面积单位'
+                            title='面积单位（预览/导出跟随）'
+                            onChange={e => onUpdate({ areaSuffix: e.target.value })}
+                            onClick={e => e.stopPropagation()}
+                        />
+                    }
                 />
                 <button type='button' className='pg-sign-edit__room-copy' aria-label='复制' title='复制' onClick={onCopy}>
                     <CopyOutlined />
@@ -82,7 +101,7 @@ function SortableRoomCard({ room, index, panelOpen, onTogglePanel, onCopy, onRem
             <ExpandPanel open={panelOpen}>
                 <div className='pg-sign-edit__room-style-panel'>
                     <div className='pg-sign-edit__room-style-group'>
-                        <div className='pg-sign-edit__room-style-group-title'>{`单元号「${room.unitNum || '—'}单元」`}</div>
+                        <div className='pg-sign-edit__room-style-group-title'>{`单元号「${room.unitNum || '—'}${room.unitSuffix}」`}</div>
                         <div className='pg-sign-edit__style-body'>
                             <StyleFields style={room.unitStyle} onChange={patch => onUpdateStyle('unitStyle', patch)} />
                         </div>
@@ -94,7 +113,7 @@ function SortableRoomCard({ room, index, panelOpen, onTogglePanel, onCopy, onRem
                         </div>
                     </div>
                     <div className='pg-sign-edit__room-style-group'>
-                        <div className='pg-sign-edit__room-style-group-title'>{`面积「${room.area || '—'}m²」`}</div>
+                        <div className='pg-sign-edit__room-style-group-title'>{`面积「${room.area || '—'}${room.areaSuffix}」`}</div>
                         <div className='pg-sign-edit__style-body'>
                             <StyleFields style={room.areaStyle} onChange={patch => onUpdateStyle('areaStyle', patch)} />
                         </div>

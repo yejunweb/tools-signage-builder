@@ -423,3 +423,21 @@
     display: flex;
     gap: 8px;
 }
+
+/* 房号「单元」「㎡」可编辑后缀：嵌在 Input suffix 内，窄宽不挤主字段 */
+.pg-sign-edit__inline-suffix {
+    width: 36px;
+    max-width: 48px;
+    margin: 0;
+    padding: 0 2px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #5c6573;
+    font-size: 12px;
+    line-height: 1.2;
+    text-align: center;
+}
+.pg-sign-edit__inline-suffix:focus {
+    color: #1f2329;
+}

@@ -133,33 +133,38 @@ export function useSignEdit({ recordId, onBack, onSaved }: UseSignEditArgs) {
             message.warning('请填写记录名称');
             return;
         }
-        const now = new Date().toISOString();
-        const id = draft.id ?? createId();
-        const preview = canvasToDataUrl(generateSignCanvas(toCanvasInput(draft)));
-        const existing = draft.id ? getRecord(draft.id) : undefined;
-        upsertRecord({
-            id,
-            name,
-            width: draft.width,
-            height: draft.height,
-            borderRadius: draft.borderRadius,
-            background: normalizeHex(draft.background),
-            transparentBackground: draft.transparentBackground,
-            buildingNum: draft.buildingNum,
-            totalFloorNum: draft.totalFloorNum,
-            buildingStyle: draft.buildingStyle,
-            floorStyle: draft.floorStyle,
-            showTypes: draft.showTypes,
-            showInfoLs: draft.showInfoLs,
-            preview,
-            createdAt: existing?.createdAt ?? now,
-            updatedAt: now,
-        });
-        const nextDraft = { ...draft, id, name };
-        setDraft(nextDraft);
-        setBaseline(draftSnapshot(nextDraft));
-        message.success('已保存');
-        onSaved();
+        try {
+            const now = new Date().toISOString();
+            const id = draft.id ?? createId();
+            const preview = canvasToDataUrl(generateSignCanvas(toCanvasInput(draft)));
+            const existing = draft.id ? getRecord(draft.id) : undefined;
+            upsertRecord({
+                id,
+                name,
+                width: draft.width,
+                height: draft.height,
+                borderRadius: draft.borderRadius,
+                background: normalizeHex(draft.background),
+                transparentBackground: draft.transparentBackground,
+                buildingNum: draft.buildingNum,
+                totalFloorNum: draft.totalFloorNum,
+                buildingStyle: draft.buildingStyle,
+                floorStyle: draft.floorStyle,
+                showTypes: draft.showTypes,
+                showInfoLs: draft.showInfoLs,
+                preview,
+                createdAt: existing?.createdAt ?? now,
+                updatedAt: now,
+            });
+            const nextDraft = { ...draft, id, name };
+            setDraft(nextDraft);
+            setBaseline(draftSnapshot(nextDraft));
+            message.success('已保存');
+            onSaved();
+            onBack();
+        } catch {
+            message.error('保存失败，请重试');
+        }
     };
 
     const handleExport = async () => {

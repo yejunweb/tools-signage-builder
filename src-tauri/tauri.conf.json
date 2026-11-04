@@ -15,7 +15,9 @@
                 "title": "标牌生成器",
                 "width": 800,
                 "height": 720,
-                "resizable": false,
+                "minWidth": 800,
+                "minHeight": 720,
+                "resizable": true,
                 "decorations": false,
                 "fullscreen": false
             }
