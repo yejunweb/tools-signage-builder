@@ -1,28 +1,24 @@
-:root {
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-    line-height: 1.5;
-    font-weight: 400;
-    color: #1f1f1f;
-    background-color: #f5f5f5;
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
+@import './styles/scrollbar.css';
 html,
 body,
 #root {
     margin: 0;
-    min-height: 100%;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #f7f8fb;
 }
 
-.app {
-    box-sizing: border-box;
-    min-height: 100vh;
+/* Antd App 与页面根同节点（className=app-root），须撑满窗口，否则百分比高度链断裂，底栏会悬在内容底而非窗底 */
+.app-root {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-    padding: 32px;
+}
+
+* {
+    box-sizing: border-box;
 }

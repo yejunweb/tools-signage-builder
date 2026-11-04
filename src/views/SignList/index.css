@@ -1,0 +1,299 @@
+.pg-sign-list {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+}
+
+.pg-sign-list__search {
+    flex-shrink: 0;
+    padding: 14px 24px 0;
+    box-sizing: border-box;
+}
+
+.pg-sign-list__search-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 36px;
+    padding: 0 12px;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #eef1f6;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+    box-sizing: border-box;
+}
+
+.pg-sign-list__search-icon {
+    color: #a0a8b8;
+    display: inline-flex;
+}
+
+.pg-sign-list__search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 13px;
+    background: transparent;
+    color: #1f2329;
+    min-width: 0;
+}
+
+.pg-sign-list__search-clear {
+    border: none;
+    background: transparent;
+    color: #a0a8b8;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.pg-sign-list__main {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    padding: 16px 24px 12px;
+    box-sizing: border-box;
+}
+
+.pg-sign-list__main.is-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 20px 24px;
+}
+
+.pg-sign-list__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #8b95a8;
+}
+
+.pg-sign-list__empty-icon {
+    width: 64px;
+    height: 44px;
+    border-radius: 10px;
+    border: 1px dashed rgba(51, 112, 255, 0.28);
+    background: rgba(51, 112, 255, 0.06);
+    color: #3370ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.pg-sign-list__empty-title {
+    font-size: 14px;
+    color: #5c6573;
+    font-weight: 500;
+}
+
+.pg-sign-list__empty-desc {
+    font-size: 12px;
+    color: #a0a8b8;
+    margin-bottom: 8px;
+}
+
+.pg-sign-list__no-match {
+    height: 100%;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8b95a8;
+    font-size: 13px;
+}
+
+.pg-sign-list__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    align-content: start;
+    padding: 2px 2px 0;
+    box-sizing: border-box;
+}
+
+.pg-sign-list__card {
+    background: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    cursor: pointer;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 16px rgba(15, 23, 42, 0.04);
+    transition: box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.pg-sign-list__card.is-hover {
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.1);
+    transform: translateY(-1px);
+}
+
+.pg-sign-list__card-preview {
+    height: 88px;
+    border-radius: 8px;
+    background: repeating-conic-gradient(#eef1f6 0% 25%, #fff 0% 50%) 50% / 14px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.pg-sign-list__card-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.pg-sign-list__card-placeholder {
+    width: 70%;
+    height: 48px;
+    border-radius: 8px;
+    background: #f2f4f8;
+}
+
+.pg-sign-list__card-foot {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 28px;
+}
+
+.pg-sign-list__card-name {
+    flex: 1;
+    min-width: 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1f2329;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 20px;
+}
+
+.pg-sign-list__card-actions {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+}
+
+.pg-sign-list__card-actions.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.pg-sign-list__card-actions button {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #8b95a8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.pg-sign-list__card-actions button:hover {
+    background: rgba(15, 23, 42, 0.06);
+    color: #5c6573;
+}
+
+.pg-sign-list__card-actions button.is-danger {
+    color: #e34d59;
+}
+
+.pg-sign-list__card-actions button.is-danger:hover {
+    background: rgba(227, 77, 89, 0.08);
+    color: #e34d59;
+}
+
+.pg-sign-list__pager {
+    flex-shrink: 0;
+    height: 36px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: #a0a8b8;
+    font-size: 11px;
+    background: #f7f8fb;
+    box-sizing: border-box;
+}
+
+.pg-sign-list__pager-nav {
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #5c6573;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.pg-sign-list__pager-nav:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.pg-sign-list__pager-dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.pg-sign-list__pager-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    border: none;
+    padding: 0;
+    background: rgba(15, 23, 42, 0.12);
+    cursor: pointer;
+    transition: width 0.2s ease, background 0.2s ease;
+}
+
+.pg-sign-list__pager-dot.is-active {
+    width: 16px;
+    background: #3370ff;
+}
+
+.pg-sign-list__pager-meta {
+    margin-left: 4px;
+    min-width: 72px;
+}
+
+.pg-sign-list__footer {
+    flex-shrink: 0;
+    height: 56px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    background: #fff;
+    border-top: 1px solid #eef1f6;
+    box-sizing: border-box;
+}

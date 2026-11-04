@@ -3,5 +3,18 @@
     "identifier": "default",
     "description": "Capability for the main window",
     "windows": ["main"],
-    "permissions": ["core:default", "opener:default"]
+    "permissions": [
+        "core:default",
+        "core:window:allow-close",
+        "core:window:allow-minimize",
+        "core:window:allow-start-dragging",
+        "opener:default",
+        "dialog:allow-save",
+        "fs:allow-write-file",
+        "fs:scope-download-recursive",
+        "fs:scope-desktop-recursive",
+        "fs:scope-document-recursive",
+        "fs:scope-home-recursive",
+        "fs:scope-picture-recursive"
+    ]
 }

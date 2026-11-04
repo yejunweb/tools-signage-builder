@@ -1,0 +1,35 @@
+/**
+ * 细滚动条样式类（WebKit + 标准属性）。
+ * 仅挂在两处可滚容器，勿套 body / #root / 其它区域：
+ *   1) 列表页卡片区  SignList  .pg-sign-list__main
+ *   2) 编辑页表单区  SignEdit  .pg-sign-edit__form
+ */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(15, 23, 42, 0.22) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(15, 23, 42, 0.16);
+    border-radius: 999px;
+    border: 1px solid transparent;
+    background-clip: padding-box;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(15, 23, 42, 0.32);
+}
+
+.custom-scrollbar::-webkit-scrollbar-corner {
+    background: transparent;
+}

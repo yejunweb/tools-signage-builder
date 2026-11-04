@@ -1,0 +1,60 @@
+.comp-sign-preview-card {
+    margin: 12px 20px 0;
+    background: #fff;
+    border: 1px solid #eef1f6;
+    border-radius: 12px;
+    flex-shrink: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.comp-sign-preview-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    box-sizing: border-box;
+}
+
+.comp-sign-preview-card__title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1f2329;
+    line-height: 1.4;
+}
+
+.comp-sign-preview-card__meta {
+    font-size: 12px;
+    font-weight: 400;
+    color: #8b95a8;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.comp-sign-preview {
+    height: 158px;
+    margin: 0;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.comp-sign-preview.is-checker {
+    background: repeating-conic-gradient(#e8ecf4 0% 25%, #fff 0% 50%) 50% / 16px 16px;
+}
+
+.comp-sign-preview.is-plain {
+    background: #f0f3f9;
+}
+
+.comp-sign-preview__canvas {
+    max-width: 100%;
+    max-height: 100%;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.1);
+}

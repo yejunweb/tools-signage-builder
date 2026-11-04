@@ -1,0 +1,78 @@
+/* 展开面板：grid-template-rows 动画，避免 max-height 硬切 */
+.pg-expand-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.22s ease;
+}
+
+.pg-expand-panel.is-open {
+    grid-template-rows: 1fr;
+}
+
+.pg-expand-panel__clip {
+    overflow: hidden;
+    min-height: 0;
+}
+
+.pg-expand-panel__body {
+    opacity: 0;
+    transform: translateY(-4px);
+    transition:
+        opacity 0.18s ease,
+        transform 0.22s ease;
+    pointer-events: none;
+}
+
+.pg-expand-panel.is-open .pg-expand-panel__body {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.pg-expand-trigger {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #5c6573;
+    cursor: pointer;
+    pointer-events: auto;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.pg-expand-trigger:hover {
+    color: #3370ff;
+}
+
+.pg-expand-trigger:hover .pg-expand-trigger__arrow {
+    color: #3370ff;
+}
+
+.pg-expand-trigger__arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    font-size: 12px;
+    line-height: 1;
+    color: #c0c6d4;
+    transition:
+        transform 0.2s ease,
+        color 0.15s ease;
+}
+
+.pg-expand-trigger__arrow.is-open {
+    transform: rotate(90deg);
+    color: #3370ff;
+}
