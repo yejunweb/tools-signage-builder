@@ -1,0 +1,43 @@
+---
+description: 约定式提交、简体中文说明，以及本仓库 commitlint 允许的 type
+alwaysApply: false
+---
+
+# Git 规范
+
+仅在用户明确要求提交时暂存并提交；用户只要求修改、检查或审查时，不执行 `git add` 或 `git commit`。
+
+## 提交信息
+
+格式：`<type>(<scope>): <subject>`
+
+- `<subject>` 与正文使用简体中文，冒号后保留空格
+- 允许的 type：`feat`、`fix`、`docs`、`test`、`perf`、`chore`、`style`、`refactor`、`revert`、`build`、`ci`（与 `commitlint.config.js`、`.cz-config.js` 一致）
+- 建议填写 `scope`（空 scope 仅警告）
+
+正文超过两项时使用列表：
+
+```
+feat(home): 补齐大屏标题栏用户区
+
+- 接入退出登录
+- 展示数据更新时间
+```
+
+交互式提交使用 `pnpm commit`。
+
+## 提交前检查
+
+钩子自动执行：
+
+- `pre-commit`：lint-staged（`ls-lint`、Prettier、`eslint --fix`、`stylelint --fix`）
+- `commit-msg`：`commitlint`
+
+涉及 TypeScript 的改动还须运行 `pnpm type-check`。钩子失败后修复并重试，不用 `--no-verify`。
+
+## 分支
+
+- `main`：发布分支
+- `feature/<描述>`、`fix/<描述>`、`release/<版本>`、`hotfix/<版本>-<描述>`
+
+一次提交围绕一个主要目的，避免混入无关格式化或功能。

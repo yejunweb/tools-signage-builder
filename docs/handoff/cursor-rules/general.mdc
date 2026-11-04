@@ -1,0 +1,34 @@
+---
+description: 项目通用开发规范，适用于所有文件和会话
+alwaysApply: true
+---
+
+# 项目通用规范
+
+## 技术栈
+
+- React 19、Vite 7、TypeScript、TSX
+- React Router 7（Hash History，`createHashRouter`）
+- Ant Design 6（根上已挂 `ConfigProvider` + `AntdApp`，主题在 `src/config/theme.ts`）
+- Zustand 5（immer）、ahooks、SWR
+- UnoCSS（工具类 `g-` 前缀，关闭 preflight；attributify 仅 `un-`）
+- Axios（统一走 `@/services`）、dayjs
+- 仅使用 `pnpm`（`packageManager` 为 `pnpm@10.26.0`）；执行本地 CLI 用 `pnpm exec`，不用 npm、npx 或 yarn
+
+## 目录
+
+- `env/`：环境变量（Vite `envDir`），不在根目录
+- `config/vite/plugins/`：Vite 插件装配
+- `src/api/<domain>/`：接口模块（`api.ts` + `types.ts` + `index.ts`）
+- `src/services/`：axios 实例与拦截器；业务代码不新建实例
+- `src/views/`：页面，目录 PascalCase
+- `src/components/`、`src/hooks/`、`src/store/modules/`、`src/utils/`、`src/assets/svg/`：通用组件、复用逻辑、状态、工具、图标
+- `@` 与 `@src` 均指向 `src/`；新增引用使用 `@/`，与 Prettier `importOrder` 一致
+
+## 开发原则
+
+- 优先复用 `src/utils`、`src/hooks`、Ant Design 和 ahooks
+- 请求用 `@/services` 的 `request`；持久化用 `@/utils/storage`
+- 需要同步 README 的变更范围以 `document.mdc` 为准
+- 用简体中文回复
+- 不要自动提交 git，除非用户明确要求

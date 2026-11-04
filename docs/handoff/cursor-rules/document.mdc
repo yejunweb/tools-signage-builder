@@ -1,0 +1,36 @@
+---
+description: README 与 Markdown 文档的编写约定
+globs: "**/*.md"
+alwaysApply: false
+---
+
+# 文档规范
+
+文档使用简体中文和 Markdown；使用说明以根目录 `README.md` 为准。
+
+## README 同步
+
+变更以下内容时同步更新 `README.md`：
+
+- 脚本、环境变量（`env/.env*`）
+- 请求约定（`@/services` 的成功码、`skipCodeCheck` 等）
+- SVG 符号名或用户需要了解的目录结构
+
+## 格式
+
+- 标题用 ATX（`#`），层级不跳级
+- 列表用 `-`
+- 代码块标明语言
+- 路径、命令、变量用反引号，例如 `src/services/index.ts`
+- 文件名使用英文 kebab-case；`README.md` 除外
+
+## 新增文档
+
+内容超过 README 一个小节时，创建 `docs/<kebab-case>.md` 并在 README 链接。文档按需包含：
+
+- 背景与目标
+- 关键目录
+- 步骤与配置（`env`、`vite.config.ts`）
+- 调用示例与注意事项
+
+示例须可按当前 API 运行。编写接口清单时，以表格列出名称、方法、路径、参数和返回字段。

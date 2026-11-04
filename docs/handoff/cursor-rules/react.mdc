@@ -1,0 +1,88 @@
+---
+description: React 函数组件、状态、路由与渲染性能约定
+globs: "src/**/*.tsx,src/hooks/**/*.ts,src/store/**/*.ts,src/router/**/*.ts"
+alwaysApply: false
+---
+
+# React 规则
+
+函数组件 + Hooks。页面默认导出，放在 `src/views/<PascalCase>/index.tsx`；通用组件放 `src/components/<PascalCase>/`。
+
+## 组件
+
+- 一个组件只做一件事；JSX 里不写复杂业务表达式，抽到组件上方的变量或函数
+- 不在组件函数内部再定义组件（每次渲染都是新类型，会卸掉子树状态）
+- 可增删或重排的列表使用稳定 `key`，不用数组下标；完全静态且不会重排的列表可例外
+- 条件可能为 `0` 或 `NaN` 时用三元表达式，避免 `{count && <Badge />}` 把 `0` 渲染出来
+- 只对纯展示且渲染成本高的组件使用 `memo`（如 `SvgIcon`），不要给每个组件套 `memo`
+
+```tsx
+function Home() {
+    return (
+        <div className='pg-home'>
+            <TitleBar />
+        </div>
+    );
+}
+
+export default Home;
+```
+
+## 状态与请求
+
+- 能由 props / state 算出来的值在渲染期派生，不要再用 `useEffect` 同步进另一份 state
+- 下一状态依赖上一状态时使用函数式更新：`setItems(prev => ...)`
+- Zustand 只订阅用到的字段：`useUserStore(state => state.logout)`。回调里才读的值用 `useUserStore.getState()`，不订阅
+- store 放在 `src/store/modules/useXxxStore.ts`，使用 `create` + `immer`；需要落盘时用 `persist`，并复用 `@/utils/storage` 的 `local`。store 模块内不调用 React Hook
+- 变更类操作（登录、提交）直接调用 `src/api` 请求函数
+- 多处共享的查询用 `useSWR`，key 保持稳定；不要为读接口再写 `useEffect` + `useState`
+- 防抖 / 节流使用 `lodash-es` 的具名导入，并在卸载时 `cancel()`
+- 副作用放在事件或 `useEffect`；卸载时清理定时器、订阅和防抖
+
+## 路由与包体
+
+- 新页面在 `src/router/index.tsx` 注册，用 `lazy(() => import('@/views/...'))` 包进 `LazyLoad`
+- 图表、地图、编辑器等重型组件用 `React.lazy`；非组件库用动态 `import()`，不要打进首屏
+- 跳转使用 `@/hooks` 的 `useRouter`（`push` / `replace`），不直接散落 `window.location`
+- `antd`、`@ant-design/icons`、`lodash-es` 使用具名导入，让构建做 tree-shaking
+
+## 命名
+
+- 事件处理命名 `handleXxx`；布尔值用 `is` / `has` / `show` 前缀
+- props、请求参数和返回值要有明确类型
+
+## 注释
+
+- 不写文件头注释；含义明显的代码、状态和类型字段不重复注释
+- 组件职责不直观时，在函数上方写块注释，说明它负责什么、边界在哪
+- 不直观的 Props 字段、组件状态和对外函数用单行 JSDoc；修改时保留仍然准确的已有注释
+- JSX 里的未完成区域用 `{/* TODO: 说明 */}`
+- 仅在函数较长时按需添加功能块分隔注释，顺序为：Store、组件状态、业务派生、事件处理、Effect
+
+```tsx
+/**
+ * 大屏主页壳：当前仅落地标题栏。
+ * 左右插槽 / 地图 / 模式切换尚未接入。
+ */
+function Home() {
+    return (
+        <div className='pg-home'>
+            <TitleBar />
+            {/* TODO: L1–L3 / R1–R2 插槽、中心地图、底部模式切换 */}
+        </div>
+    );
+}
+```
+
+```tsx
+export type TitleBarProps = {
+    /** 当前模式文案，大屏模式切换落地前用占位 */
+    modeLabel?: string;
+};
+
+// ---------------------------- 组件状态 ----------------------------
+const [open, setOpen] = useState(false);
+
+// ---------------------------- 退出登录 ----------------------------
+const handleLogout = async () => {};
+```

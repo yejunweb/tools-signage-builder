@@ -1,0 +1,51 @@
+---
+description: TypeScript 编码约定与请求写法
+globs: "**/*.ts,**/*.tsx"
+alwaysApply: false
+---
+
+# TypeScript 规则
+
+`tsconfig.json` 已开启 `strict`、`noUnusedLocals`、`noUnusedParameters`、`exactOptionalPropertyTypes`、`noImplicitReturns`。
+
+- 对象结构使用 `interface`；联合、交叉、组件 Props 使用 `type`
+- 省略可推断的类型；业务代码禁止 `any`。底层库兼容确实无法准确建模时，局部使用并注明原因；不确定时优先使用 `unknown` 并用类型守卫收窄
+- 类型专用导入使用 `import type`
+- 少用 `as`；断言到具体类型，不断言为 `any`
+- `exactOptionalPropertyTypes` 下，可选字段用省略表达「没有」，不要显式传入 `undefined`
+
+```ts
+import type { LoginData } from '@/api/auth';
+import { request } from '@/services';
+```
+
+## 路径
+
+- 业务代码使用 `@/...` 引用
+- 环境变量类型由 `vite-plugin-env-types` 根据 `env/.env*` 生成到 `types/env.d.ts`。新增 `VITE_*` 后运行 Vite 命令重新生成，不手改该文件或另写平行声明
+
+## 请求
+
+- 接口放在 `src/api/<domain>/`，从领域目录引入；目录与注释见 `api.mdc`
+- 使用 `@/services` 的 `request<T>()`，不新建 axios 实例
+
+```ts
+export const getInfo = () =>
+    request<AuthInfoResult>({
+        url: '/userservice/auth/getInfo',
+        method: 'get',
+    });
+```
+
+- 成功码为 `0` 或 `200`
+- 标准 `{ code, data }` 响应的泛型 `T` 只表示 `data` 类型，调用结果仍为 `{ code, data }`
+- 返回体无需业务码校验、需要直接返回响应体时才设置 `skipCodeCheck: true`；它不返回 `AxiosResponse`
+- 同一请求默认取消前一次；需并行时传 `multiple: true`
+- 不打印失败提示时传 `hideErrorToast: true`
+- 可取消的延迟请求使用 `requestDelay`
+- 彼此独立的请求用 `Promise.all` 并行，不串行等待
+
+## 工具
+
+- 终端和脚本使用 pnpm，如 `pnpm dev`、`pnpm type-check`
+- 本地持久化使用 `@/utils/storage` 的 `local` / `session`，组件内用 `useLocalStorageState` / `useSessionStorageState`，不直接访问 `localStorage`

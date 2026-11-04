@@ -1,0 +1,55 @@
+---
+description: 接口模块的目录结构、类型拆分与命名、注释约定
+globs: src/api/**
+alwaysApply: false
+---
+
+# 接口规范
+
+请求写法见 `typescript.mdc`。调用方从领域目录引入，例如 `import { login } from '@/api/auth'`，不经统一的 `APIS` 对象。
+
+## 目录
+
+每个领域一个 camelCase 目录：
+
+```text
+src/api/
+  auth/
+    index.ts    export * from './api' 与 export * from './types'
+    api.ts      请求函数
+    types.ts    参数与返回类型
+```
+
+- `api.ts` 只写请求函数，类型都放 `types.ts`；需要时可加 `constants.ts`，同样在 `index.ts` 中 `export *`
+- 类型从领域目录引入：`import type { LoginData } from '@/api/auth'`
+
+## 类型
+
+- 请求体 `XxxData`，query 参数 `XxxParams`，返回体 `XxxResult`，列表项 `XxxItem`
+- 返回字段与 `code` 平铺（如 `{ code, msg, token }`）时让结果类型继承 `CustomResponseBase`，调用结果为该平铺对象
+- 标准 `{ code, data }` 只把 `data` 的类型传给 `request<T>()`，调用结果仍为 `CustomResponseData<T>`
+- 优先复用已有类型（`extends`、`Omit`）
+
+## 注释
+
+- 不写文件头注释；请求函数不用 JSDoc
+- 每个请求函数上方写一行 `// <METHOD> <path> - <中文说明>`
+- `types.ts` 中，每个接口的第一个类型上方写同样一行，同一接口的后续类型不再重复
+- 字段说明写在行尾 `// 说明`，含义明显的字段不写
+
+```ts
+// GET /userservice/auth/sendMsg - 获取短信验证码
+export interface SendMsgParams {
+    phone: string; // 手机号
+}
+```
+
+```ts
+// GET /userservice/auth/sendMsg - 获取短信验证码
+export const sendMsg = (params: SendMsgParams) =>
+    request<SendMsgResult>({
+        url: '/userservice/auth/sendMsg',
+        method: 'get',
+        params,
+    });
+```

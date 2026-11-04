@@ -1,0 +1,46 @@
+---
+description: PC 端样式、主题变量、UnoCSS 与 Ant Design 主题约定
+globs: "**/*.tsx,**/*.scss,**/*.css"
+alwaysApply: false
+---
+
+# 样式规则
+
+PC 端按设计稿写 `px`，项目没有把 `px` 转成 `vw`。大屏画布参考宽度 1920。
+
+## 主题
+
+可复用的颜色、字号和间距使用 `src/styles/scss/var.scss`。页面独有且来自设计稿的值可就地声明；该文件经 `src/styles/scss/index.scss` 由 Vite `additionalData` 注入，业务 SCSS 不重复 `@use`。
+
+- 颜色：`$color-master`、`$font-color-1`～`$font-color-4`、`$color-error`
+- 字号：`$font-size-footnote`、`$font-size-tips`、`$font-size-content`、`$font-size-subtitle`
+- 间距：`$space1`（4px）到 `$space10`。没有明确设计值时优先使用 4px 网格
+
+```scss
+.pg-home {
+    padding: $space4;
+    font-size: $font-size-content;
+    color: $font-color-1;
+}
+```
+
+修改 SCSS 与 Ant Design 共用的主题色时，同时更新 `var.scss` 和 `src/config/theme.ts` 的 `themeColors`（`ConfigProvider` 读后者）。仅供一侧使用的变量不必重复定义；不改 `node_modules`。
+
+## 类名
+
+- 页面根节点：`pg-<name>`（如 `pg-home`、`pg-login`）
+- 区块 / 通用组件根节点：`comp-<name>`（如 `comp-title-bar`）
+- 元素用 BEM `__`；复杂布局、伪元素、状态样式和组件语义结构写在同目录 SCSS
+- JSX 中简单的布局、间距和对齐优先使用 UnoCSS；同一属性不在 UnoCSS 与 SCSS 中重复声明
+
+## UnoCSS
+
+- 工具类使用 `g-` 前缀，如 `g-flex`、`g-w-full`
+- attributify 必须带 `un-` 前缀（`prefixedOnly`），避免覆盖原生 DOM 属性
+- 可用 shortcut：`page-wrapper`、`bg-base`、`text-base`、`border-base`、`rounded-base`
+
+## SVG
+
+- 源文件放在 `src/assets/svg/`；`symbolId` 为 `icon-[dir]-[name]`，根目录文件省略目录段
+- 使用 `<SvgIcon name="empty" />`（name 不含 `icon-` 前缀）；图标为 `1em`，尺寸由父级字号控制
+- 需跟随文字颜色时使用 `currentColor`；固定 `fill` / `stroke` 保持原色
